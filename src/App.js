@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AiOutlineDelete, AiOutlineCheck } from "react-icons/ai";
 import "./App.css";
 
 function App() {
@@ -41,8 +42,15 @@ function App() {
 
         <div className="todo-list">
           <div className="todo-list-item">
-            <h3>Task 1</h3>
-            <text>Description</text>
+            <div>
+              <h3>Task 1</h3>
+              <text>Description</text>
+            </div>
+
+            <div>
+              <AiOutlineDelete className="icon" title="Delete?" />
+              <AiOutlineCheck className="check-icon" />
+            </div>
           </div>
         </div>
       </div>
