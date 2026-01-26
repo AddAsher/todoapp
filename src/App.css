@@ -48,7 +48,7 @@ h1 {
 
 .todo-input-item input:focus {
   outline: none;
-  outline: 2px solid rgb(0, 230, 125);
+  /* outline: 2px solid rgb(0, 230, 125); */
 }
 
 .primaryBtn {
@@ -120,7 +120,7 @@ h1 {
 }
 
 .icon {
-  font-size: 35px;
+  font-size: 85px;
   cursor: pointer;
 }
 

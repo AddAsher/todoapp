@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineDelete, AiOutlineCheck, AiOutlineEdit } from "react-icons/ai";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
+import {Button, TextField} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete"
+import CheckIcon from "@mui/icons-material/Check";
+import EditIcon from "@mui/icons-material/Edit";
 import "./App.css";
 
 function App() {
@@ -80,15 +85,15 @@ function App() {
   };
 
   const handleUpdateTitle = (value) => {
-    setCurrentEditedItem((prev)=>{
-      return {...prev, title:value}
-    })
+    setCurrentEditedItem((prev) => {
+      return { ...prev, title: value };
+    });
   };
 
   const handleUpdateDescription = (value) => {
-    setCurrentEditedItem((prev)=>{
-      return {...prev, description:value}
-    })
+    setCurrentEditedItem((prev) => {
+      return { ...prev, description: value };
+    });
   };
 
   const handleUpdateTodo = () => {
@@ -99,135 +104,143 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>My Todos</h1>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <h1>My Todos</h1>
 
-      <div className="todo-wrapper">
-        <div className="todo-input">
-          <div className="todo-input-item">
-            <label>Title</label>
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="What's the task title?"
-            />
+        <div className="todo-wrapper">
+          <div className="todo-input">
+            <div className = "todo-input-item">
+              <TextField
+                label="Title"
+                // type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="What's the task title?"
+              />
+            </div>
+            <div className="todo-input-item">
+              <TextField
+                label = "Description"
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="What's the task description?"
+              />
+            </div>
+            <div className="todo-input-item">
+              <Button
+                type="button"
+                onClick={handleAddTodo}
+                variant="contained"
+              >
+                Add
+              </Button>
+            </div>
           </div>
-          <div className="todo-input-item">
-            <label>Description</label>
-            <input
-              type="text"
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              placeholder="What's the task description?"
-            />
-          </div>
-          <div className="todo-input-item">
-            <button
-              type="button"
-              onClick={handleAddTodo}
-              className="primaryBtn"
+
+          <div className="btn-area">
+            <Button
+              type = "button"
+              className={`secondaryBtn ${isCompleteScreen === false ? "active" : ""}`}
+              onClick={() => setIsCompleteScreen(false)}
+              variant = "outlined"
             >
-              Add
-            </button>
+              Todos
+            </Button>
+            <Button
+              type = "button"
+              className={`secondaryBtn ${isCompleteScreen === true && "active"}`}
+              onClick={() => setIsCompleteScreen(true)}
+              variant = "outlined"
+            >
+              Completed
+            </Button>
           </div>
-        </div>
 
-        <div className="btn-area">
-          <button
-            className={`secondaryBtn ${isCompleteScreen === false ? "active" : ""}`}
-            onClick={() => setIsCompleteScreen(false)}
-          >
-            Todos
-          </button>
-          <button
-            className={`secondaryBtn ${isCompleteScreen === true && "active"}`}
-            onClick={() => setIsCompleteScreen(true)}
-          >
-            Completed
-          </button>
-        </div>
-
-        <div className="todo-list">
-          {isCompleteScreen === false &&
-            allTodos.map((item, index) => {
-              if (currentEdit === index) {
+          <div className="todo-list">
+            {isCompleteScreen === false &&
+              allTodos.map((item, index) => {
+                if (currentEdit === index) {
+                  return (
+                    <div className="edit__wrapper" key={index}>
+                      <input
+                        placeholder="Updated Title"
+                        onChange={(e) => handleUpdateTitle(e.target.value)}
+                        value={currentEditedItem.title}
+                      />
+                      <TextField
+                        placeholder="Updated Title"
+                        rows={4}
+                        onChange={(e) =>
+                          handleUpdateDescription(e.target.value)
+                        }
+                        value={currentEditedItem.description}
+                      />
+                      <Button
+                        type="button"
+                        onClick={handleUpdateTodo}
+                        className="primaryBtn"
+                        variant = "contained"
+                      >
+                        Update
+                      </Button>
+                    </div>
+                  );
+                }
                 return (
-                  <div className="edit__wrapper" key={index}>
-                    <input
-                      placeholder="Updated Title"
-                      onChange={(e) => handleUpdateTitle(e.target.value)}
-                      value={currentEditedItem.title}
-                    />
-                    <textarea
-                      placeholder="Updated Title"
-                      rows={4}
-                      onChange={(e) => handleUpdateDescription(e.target.value)}
-                      value={currentEditedItem.description}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleUpdateTodo}
-                      className="primaryBtn"
-                    >
-                      Update
-                    </button>
+                  <div className="todo-list-item" key={index}>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </div>
+
+                    <div>
+                      <DeleteIcon
+                        className="icon"
+                        onClick={() => handleDeleteTodo(index)}
+                        title="Delete?"
+                      />
+                      <CheckIcon
+                        className="check-icon"
+                        onClick={() => handleComplete(index)}
+                        title="Complete?"
+                      />
+                      <EditIcon
+                        className="check-icon"
+                        onClick={() => handleEdit(index, item)}
+                        title="Edit?"
+                      />
+                    </div>
                   </div>
                 );
-              }
-              return (
-                <div className="todo-list-item" key={index}>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                  </div>
+              })}
 
-                  <div>
-                    <AiOutlineDelete
-                      className="icon"
-                      onClick={() => handleDeleteTodo(index)}
-                      title="Delete?"
-                    />
-                    <AiOutlineCheck
-                      className="check-icon"
-                      onClick={() => handleComplete(index)}
-                      title="Complete?"
-                    />
-                    <AiOutlineEdit
-                      className="check-icon"
-                      onClick={() => handleEdit(index, item)}
-                      title="Edit?"
-                    />
-                  </div>
-                </div>
-              );
-            })}
+            {isCompleteScreen === true &&
+              completedTodos.map((item, index) => {
+                return (
+                  <div className="todo-list-item" key={index}>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                      <p>
+                        <smnall>Completed on: {item.completedOn}</smnall>
+                      </p>
+                    </div>
 
-          {isCompleteScreen === true &&
-            completedTodos.map((item, index) => {
-              return (
-                <div className="todo-list-item" key={index}>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                    <p>
-                      <smnall>Completed on: {item.completedOn}</smnall>
-                    </p>
+                    <div>
+                      <DeleteIcon
+                        className="icon"
+                        onClick={() => handleDeleteCompletedTodo(index)}
+                        title="Delete?"
+                      />
+                    </div>
                   </div>
-
-                  <div>
-                    <AiOutlineDelete
-                      className="icon"
-                      onClick={() => handleDeleteCompletedTodo(index)}
-                      title="Delete?"
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
