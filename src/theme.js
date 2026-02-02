@@ -37,7 +37,7 @@ const theme = createTheme({
             },
             "&.Mui-focused fieldset": {
               borderColor: "rgb(0, 230, 125)",
-              borderWidth: "2px",
+              borderWidth: "2px", 
             },
           },
           "& .MuiOutlinedInput-notchedOutline": {
